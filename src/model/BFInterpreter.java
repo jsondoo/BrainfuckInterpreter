@@ -9,14 +9,15 @@ import java.util.Scanner;
  * Created by jsondoo on 2017-02-17.
  */
 public class BFInterpreter {
-    private final int memSize = 50000;
+    private int memSize = 50000;
     private byte[] data;
 
     private Scanner scanner = new Scanner(System.in);
     private String input = null;
     private String output = null;
 
-    private Deque<Integer> bracketStack = new ArrayDeque<>(); // keeps track of loops by stacking indexes of opening brackets
+    // stack for keeping track of opening brackets (for handling nested loops)
+    private Deque<Integer> bracketStack = new ArrayDeque<>();
 
     public BFInterpreter(){
         data = new byte[memSize];
@@ -53,22 +54,20 @@ public class BFInterpreter {
                 case '[':
                     if(data[dp]==0) // current cell is zero, move instruction pointer to matching ']'
                         i = findMatchingClosingBracket(i);
-                    else // move to next instruction
+                    else // current cell is not zero, move to next instruction
                         bracketStack.push(i);
                     break;
                 case ']':
-                    if(data[dp]==0) // move to next instruction
+                    if(data[dp]==0) // current cell is zero, move to next instruction
                         bracketStack.pop();
-                    else // move back to matching '['
+                    else // else go back to start of loop
                         i = bracketStack.getLast();
                     break;
-                // TODO loops
             }
         }
 
         this.output = sb.toString().trim();
     }
-
 
     public void setString(String str) throws IOException {
         str = str.replaceAll(" ","").trim(); // first remove whitespaces
@@ -78,9 +77,9 @@ public class BFInterpreter {
         }
 
         // check for matching opening/closing bracket
-        int opening = str.length() - str.replace("[","").length();
-        int closing = str.length() - str.replace("]","").length();
-        if(opening != closing){
+        int countOpeningBracket = str.length() - str.replace("[","").length();
+        int countClosingBracket = str.length() - str.replace("]","").length();
+        if(countOpeningBracket != countClosingBracket){
             throw new IOException("Unmatched bracket(s).");
         }
 
@@ -89,11 +88,15 @@ public class BFInterpreter {
         data = new byte[memSize];
     }
 
-    public String getInput(){ return input; }
+    public String getInput(){
+        return input;
+    }
 
     public String getOutput(){
         return output;
     }
+
+
 
     private boolean isValid(String s){
         if(s.isEmpty()) return false;

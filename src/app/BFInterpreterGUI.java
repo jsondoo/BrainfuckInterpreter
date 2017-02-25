@@ -1,16 +1,18 @@
 package app;
 
-import javafx.event.ActionEvent;
+import com.sun.javafx.font.freetype.HBGlyphLayout;
 import javafx.application.Application;
-        import javafx.event.EventHandler;
-        import javafx.geometry.Insets;
-        import javafx.scene.Scene;
-        import javafx.scene.control.Button;
-        import javafx.scene.control.Label;
-        import javafx.scene.control.TextArea;
-        import javafx.scene.layout.VBox;
-        import javafx.scene.paint.Color;
-        import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import model.BFInterpreter;
 
 public class BFInterpreterGUI extends Application implements EventHandler<ActionEvent>{
@@ -20,13 +22,14 @@ public class BFInterpreterGUI extends Application implements EventHandler<Action
     private BFInterpreter bf = new BFInterpreter();
 
     private Label labelInput;
-    private VBox inputBox;
-    private TextArea inputField; // allows multi-line text wrapping
+    private TextArea inputField;
     private Button buttonInterpret;
+    private Button buttonClearInput;
 
     private Label labelError;
     private Label labelOutput;
     private TextArea outputField;
+    private Button buttonClearOutput;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -35,19 +38,18 @@ public class BFInterpreterGUI extends Application implements EventHandler<Action
 
         labelInput = new Label("Input:");
 
-        inputBox = new VBox();
-        inputBox.setSpacing(10);
-
         inputField = new TextArea();
         inputField.setPrefHeight(HEIGHT/3);
         inputField.setWrapText(true);
         inputField.setFocusTraversable(false); // so that prompt text appears at launch
         inputField.setPromptText("Enter your command here!");
 
+        HBox inputButtons = new HBox();
         buttonInterpret = new Button("Interpret");
         buttonInterpret.setOnAction(this);
-
-        inputBox.getChildren().addAll(inputField,buttonInterpret);
+        buttonClearInput = new Button("Clear");
+        buttonClearInput.setOnAction(this);
+        inputButtons.getChildren().addAll(buttonInterpret,buttonClearInput);
 
         // label for displaying errors and exceptions
         labelError = new Label();
@@ -63,9 +65,11 @@ public class BFInterpreterGUI extends Application implements EventHandler<Action
         outputField.setPromptText("Output will be displayed here.");
         outputField.setPrefWidth(WIDTH);
 
+        buttonClearOutput = new Button("Clear");
+
         VBox root = new VBox();
         root.setPadding(new Insets(10,10,10,10));
-        root.getChildren().addAll(labelInput, inputBox, labelError,labelOutput,outputField);
+        root.getChildren().addAll(labelInput, inputField, inputButtons, labelError, labelOutput, outputField, buttonClearOutput);
 
         Scene scene = new Scene(root,WIDTH,HEIGHT);
         primaryStage.setScene(scene);
@@ -74,7 +78,7 @@ public class BFInterpreterGUI extends Application implements EventHandler<Action
 
     @Override
     public void handle(ActionEvent event) {
-        if(event.getSource()==buttonInterpret){
+        if(event.getSource().equals(buttonInterpret)){
             // clear text
             labelError.setText("");
             outputField.setText("");
@@ -88,6 +92,14 @@ public class BFInterpreterGUI extends Application implements EventHandler<Action
             catch(Exception e){
                 labelError.setText("Error: " + e.getMessage());
             }
+        }
+        else if(event.getSource().equals(buttonClearInput)){
+            labelError.setText("");
+            inputField.setText("");
+        }
+        else if(event.getSource().equals(buttonClearOutput)){
+            labelError.setText("");
+            outputField.setText("");
         }
     }
 }
