@@ -23,8 +23,7 @@ public class BFInterpreter {
         data = new byte[memSize];
     }
 
-    // TODO exception handling for invalid inputs
-
+    // TODO infinite loop handling
     public void interpret(){
         char[] command = this.input.toCharArray();
         StringBuilder sb = new StringBuilder(); // for building the output string
@@ -95,8 +94,6 @@ public class BFInterpreter {
     public String getOutput(){
         return output;
     }
-
-
 
     private boolean isValid(String s){
         if(s.isEmpty()) return false;

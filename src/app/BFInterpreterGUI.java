@@ -1,6 +1,5 @@
 package app;
 
-import com.sun.javafx.font.freetype.HBGlyphLayout;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -88,6 +87,9 @@ public class BFInterpreterGUI extends Application implements EventHandler<Action
                 bf.interpret();
                 String result = bf.getOutput();
                 outputField.setText(result);
+            }
+            catch(IndexOutOfBoundsException e){
+                labelError.setText("Error: Index out of bounds");
             }
             catch(Exception e){
                 labelError.setText("Error: " + e.getMessage());
