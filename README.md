@@ -1,6 +1,6 @@
 # Brainfuck Interpreter
 
-An interpreter written in Java for [Brainfuck](https://en.wikipedia.org/wiki/Brainfuck). Brainfuck is a simple language with only 8 operations. It is turing-complete - although it's not very practical to write programs with it.
+An interpreter written in Java for [Brainfuck](https://en.wikipedia.org/wiki/Brainfuck). Brainfuck is a simple turing-complete language with only 8 operations. 
 
 The application requires at least JDK7 and JavaFX. JUnit 4 is also used for comprehensive testing.
 
@@ -15,5 +15,6 @@ The application requires at least JDK7 and JavaFX. JUnit 4 is also used for comp
 3) Invalid input handling
 <img src="/images/error.JPG/" alt="invalid_input"/>
 
-4) More exception handling
+4) More exception handling (maybe I'll change to a circular array later)
 <img src="/images/error2.JPG/" alt="invalid_input2"/>
+
